@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, Fragment } from "react"
+import axios from "axios"
+import "./App.css"
 
 function App() {
+  const [blogs, setblogs] = useState([])
+
+  const fetchData = async () => {
+    try {
+      const res = await axios("https://jsonplaceholder.typicode.com/users")
+      setblogs(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {blogs.map(blog => (
+        <Fragment key={blog.id}>
+          <h1>{blog.name}</h1>
+        </Fragment>
+      ))}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
